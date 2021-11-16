@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	<div class="alert alert-success" th:if="${mensagem != null}" th:text="${mensagem}">
+		
+	</div>
+	<div class="card">
+		<div class="card-header">
+			<p class="text-primary">Nova academia</p>
+		</div>
+		<div class="card-body">
+			<form method="POST" th:object="${academia}" th:action="@{/academia/editar}">
+				<input type="hidden" th:field="*{id}">
+				<div class="form-group mb-3">
+					<label for="nome">Nome da academia: </label> 
+					<input class="form-control" type="text" th:field="*{nome}" required/>
+					<div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="email">Email: </label> 
+					<input class="form-control" type="email" th:field="*{email}" required/>
+					<div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="mensalidade">Mensalidade: </label> 
+					<input class="form-control" step="0.01" min="0.01" type="number" th:field="*{mensalidade}" required/>
+					<div class="text-danger" th:if="${#fields.hasErrors('mensalidade')}" th:errors="*{mensalidade}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="esporte">Esporte: </label> 
+					<select class="form-select" th:field="*{esporte}">
+						<option th:each="esporte: ${listaEsportes}" th:value="${esporte.id}" th:text="${esporte.descricao}">
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('esporte')}" th:errors="*{esporte}">
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary">CONCLUIR</button>
+			</form>
+		</div>
+	</div>
+</div>
+</html>

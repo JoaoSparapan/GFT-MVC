@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	<div class="alert alert-warning" th:if="${#lists.isEmpty(lista)}">
+		Nenhum esporte cadastrado!</div>
+	<div class="alert alert-success" th:if="${mensagem != null}"
+		th:text="${mensagem}"></div>
+	<div th:if="${not #lists.isEmpty(lista)}">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nome</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="esporte: ${lista}">
+					<td th:text="${esporte.id}"></td>
+					<td th:text="${esporte.descricao}" width="50%"></td>
+					<td><a class="btn btn-secondary btn-sm"
+						th:href="@{/esporte/editar(id=${esporte.id})}">Editar</a>
+						<button type="button" class="btn btn-danger btn-sm"
+							data-bs-toggle="modal" data-bs-target="#exampleModal">
+							Excluir</button>
+						<div class="modal fade" id="exampleModal" tabindex="-1"
+							aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Confirmação
+											de exclusão</h5>
+										<button type="button" class="btn-close"
+											data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">Essa ação é irreversível. Tem
+										certeza que deseja excluir esses esporte?</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">Cancelar</button>
+										<a class="btn btn-success"
+											th:href="@{/esporte/excluir(id=${esporte.id})}">Confirmar</a>
+									</div>
+								</div>
+							</div>
+						</div></td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+</div>
+</html>

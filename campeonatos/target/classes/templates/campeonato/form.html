@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	<div class="alert alert-success" th:if="${mensagem != null}" th:text="${mensagem}">
+		
+	</div>
+	<div class="card">
+		<div class="card-header">
+			<p class="text-primary">Novo Campeonato</p>
+		</div>
+		<div class="card-body">
+			<form method="POST" th:object="${campeonato}" th:action="@{/campeonato/editar}">
+				<input type="hidden" th:field="*{id}">
+				<div class="form-group mb-3">
+					<label for="nome">Nome: </label> 
+					<input class="form-control" type="text" th:field="*{nome}" required/>
+					<div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="sigla">Sigla: </label> 
+					<input class="form-control" type="text" th:field="*{sigla}" required/>
+					<div class="text-danger" th:if="${#fields.hasErrors('sigla')}" th:errors="*{sigla}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="esporte">Esporte: </label> 
+					<select class="form-select" th:field="*{esporte}">
+						<option th:each="esporte: ${listaEsportes}" th:value="${esporte.id}" th:text="${esporte.descricao}">
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('esporte')}" th:errors="*{esporte}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="dataRealizacao">Data de Realização: </label> 
+					<input class="form-control" type="text" id="_dataRealizacao"/>
+					<input type="hidden" th:field="*{dataRealizacao}"/>
+					<div class="text-danger" th:if="${#fields.hasErrors('dataRealizacao')}" th:errors="*{dataRealizacao}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="premiacaoTotal">Premiação Total: </label> 
+					<input class="form-control" type="text" th:field="*{premiacaoTotal}" required/>
+					<div class="text-danger" th:if="${#fields.hasErrors('premiacaoTotal')}" th:errors="*{premiacaoTotal}">
+					</div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="academia">Academias participantes: </label> 
+					<div th:each="academia: ${listaAcademias}">
+						<input type="checkbox" th:id="${academia}" th:value="${academia.id}" th:field="*{participantes}">
+						<label th:text="${academia.nome}"></label>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary">CONCLUIR</button>
+			</form>
+		</div>
+	</div>
+</div>
+<div layout:fragment="scripts">
+<script>
+	$(function() {
+	$("#_dataRealizacao").datepicker({
+		dateFormat: "dd/mm/yy",
+		altFormat: "yy-mm-dd",
+		altField: "#dataRealizacao"
+	});
+	});
+</script>
+</div>
+</html>

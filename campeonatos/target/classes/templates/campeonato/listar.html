@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	<div class="alert alert-warning" th:if="${#lists.isEmpty(lista)}">
+		Nenhum campeonato cadastrado!</div>
+	<div class="alert alert-success" th:if="${mensagem != null}"
+		th:text="${mensagem}"></div>
+		
+	<div class="card mb-3" th:if="${not #lists.isEmpty(lista)}">
+		<div class="card-header">
+			<p class="text-primary">Buscar campeonato</p>
+		</div>
+		<div class="card-body">
+			<form method="GET">
+				<div class="form-group mb-3">
+					<label for="sigla">Nome: </label> <input class="form-control"
+						type="text" name="nome" th:value="${nome}"/>
+				</div>
+				<div class="form-group mb-3">
+					<label for="nome">Sigla: </label> <input class="form-control"
+						type="text" name="sigla" th:value="${sigla}"/>
+				</div>
+				<button type="submit" class="btn btn-primary">Buscar</button>
+			</form>
+		</div>
+	</div>	
+		
+	<div th:if="${not #lists.isEmpty(lista)}">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nome</th>
+					<th>Sigla</th>
+					<th>Data de Realização</th>
+					<th>Esporte</th>
+					<th>Premiação Total</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="campeonato: ${lista}">
+					<td th:text="${campeonato.id}"></td>
+					<td th:text="${campeonato.nome}"></td>
+					<td th:text="${campeonato.sigla}"></td>
+					<td th:text="${#dates.format(campeonato.dataRealizacao, 'dd/MM/yyy')}"></td>
+					<td th:text="${campeonato.esporte.descricao}"></td>
+					<td th:text="'R$' + ${#numbers.formatDecimal(campeonato.premiacaoTotal, 0, 'POINT', 2, 'COMMA')}"></td>
+					<td><a class="btn btn-secondary btn-sm"
+						th:href="@{/campeonato/editar(id=${campeonato.id})}">Editar</a>
+						<button type="button" class="btn btn-danger btn-sm"
+							data-bs-toggle="modal" data-bs-target="#exampleModal">
+							Excluir</button>
+						<div class="modal fade" id="exampleModal" tabindex="-1"
+							aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Confirmação
+											de exclusão</h5>
+										<button type="button" class="btn-close"
+											data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">Essa ação é irreversível. Tem
+										certeza que deseja excluir esse campeonato?</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">Cancelar</button>
+										<a class="btn btn-success"
+											th:href="@{/campeonato/excluir(id=${campeonato.id})}">Confirmar</a>
+									</div>
+								</div>
+							</div>
+						</div></td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+</div>
+</html>
